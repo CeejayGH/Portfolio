@@ -111,7 +111,7 @@ section {
     color: white;
 }
 
-/* Dark Mode Toggle */
+/* Dark Mode Toggle - Fixed */
 .theme-toggle {
     position: fixed;
     top: 20px;
@@ -141,6 +141,7 @@ section {
 .toggle-label i {
     font-size: 14px;
     z-index: 1;
+    transition: var(--transition);
 }
 
 .toggle-label .fa-sun {
@@ -361,7 +362,6 @@ section {
     overflow: hidden;
 }
 
-/* Replace or update the existing .image-placeholder styles */
 .image-placeholder {
     width: 280px;
     height: 280px;
@@ -370,13 +370,13 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* Important for circular crop */
+    overflow: hidden;
 }
 
 .profile-photo {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* This ensures your image fills the circle properly */
+    object-fit: cover;
     border-radius: 50%;
 }
 
@@ -907,7 +907,17 @@ section {
     font-size: 0.9rem;
 }
 
-/* Responsive Design */
+/* Enhanced Responsive Design */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 95%;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+    }
+}
+
 @media (max-width: 992px) {
     .hero-content {
         flex-direction: column;
@@ -935,13 +945,17 @@ section {
     .contact-content {
         grid-template-columns: 1fr;
     }
+    
+    .floating-card {
+        transform: scale(0.9);
+    }
 }
 
 @media (max-width: 768px) {
     .nav-menu {
         position: fixed;
         top: 70px;
-        right: -100%;
+        left: -100%;
         flex-direction: column;
         background-color: var(--nav-bg);
         width: 100%;
@@ -954,7 +968,7 @@ section {
     }
     
     .nav-menu.active {
-        right: 0;
+        left: 0;
     }
     
     .hamburger {
@@ -997,22 +1011,6 @@ section {
     .floating-card {
         display: none;
     }
-}
-
-@media (max-width: 480px) {
-    .hero-title {
-        font-size: 2rem;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .btn {
-        width: 200px;
-        text-align: center;
-    }
     
     .profile-image {
         width: 250px;
@@ -1027,5 +1025,137 @@ section {
     .profile-bg {
         width: 300px;
         height: 300px;
+    }
+    
+    section {
+        padding: 80px 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 200px;
+        text-align: center;
+    }
+    
+    .profile-image {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .image-placeholder {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .profile-bg {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .skill-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .skill-bar {
+        width: 100%;
+        margin: 0;
+    }
+    
+    .skill-percent {
+        align-self: flex-end;
+    }
+    
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+    }
+    
+    .toggle-label {
+        width: 50px;
+        height: 26px;
+    }
+    
+    .toggle-ball {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .toggle-checkbox:checked + .toggle-label .toggle-ball {
+        transform: translateX(24px);
+    }
+}
+
+@media (max-width: 400px) {
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-card {
+        margin: 0 10px;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .nav-container {
+        padding: 1rem 15px;
+    }
+}
+
+/* Mobile Landscape Optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        min-height: 120vh;
+        padding-top: 60px;
+    }
+    
+    .profile-image {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .image-placeholder {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .hero-image {
+        height: 300px;
+    }
+}
+
+/* High DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .hero-title {
+        font-weight: 600;
     }
 }

@@ -1,6 +1,6 @@
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Dark Mode Toggle
+    // Dark Mode Toggle - Fixed
     const darkModeToggle = document.getElementById('dark-mode-toggle');
     const body = document.body;
     
@@ -30,6 +30,13 @@ document.addEventListener('DOMContentLoaded', function() {
     hamburger.addEventListener('click', function() {
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
+        
+        // Prevent body scroll when menu is open
+        if (navMenu.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
     });
     
     // Close mobile menu when clicking on a nav link
@@ -38,7 +45,18 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function() {
             hamburger.classList.remove('active');
             navMenu.classList.remove('active');
+            document.body.style.overflow = '';
         });
+    });
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const isClickInsideNav = document.querySelector('.nav-container').contains(event.target);
+        if (!isClickInsideNav && navMenu.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     });
     
     // Animate skill bars on scroll
@@ -57,22 +75,24 @@ document.addEventListener('DOMContentLoaded', function() {
     function isElementInViewport(el) {
         const rect = el.getBoundingClientRect();
         return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.bottom >= 0
         );
     }
     
     // Initial check for skill bars
     animateSkillBars();
     
-    // Check on scroll
-    window.addEventListener('scroll', animateSkillBars);
+    // Check on scroll with throttle
+    let isScrolling;
+    window.addEventListener('scroll', function() {
+        window.clearTimeout(isScrolling);
+        isScrolling = setTimeout(function() {
+            animateSkillBars();
+        }, 66);
+    });
     
-    // ============================================
-    // CONTACT FORM WITH EMAILJS
-    // ============================================
+    // Contact Form with EmailJS
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
@@ -177,43 +197,44 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Typewriter effect for hero subtitle
     const heroSubtitle = document.querySelector('.hero-subtitle');
-    const text = heroSubtitle.textContent;
-    heroSubtitle.textContent = '';
-    
-    let i = 0;
-    function typeWriter() {
-        if (i < text.length) {
-            heroSubtitle.textContent += text.charAt(i);
-            i++;
-            setTimeout(typeWriter, 100);
-        }
-    }
-    
-    // Start typewriter effect after a short delay
-    setTimeout(typeWriter, 1000);
-    
-    // Add floating animation to profile background
-    const profileBg = document.querySelector('.profile-bg');
-    if (profileBg) {
-        let floatDirection = 1;
-        setInterval(() => {
-            const currentTransform = profileBg.style.transform || 'translate(-50%, -50%)';
-            const match = currentTransform.match(/translate\((-?\d+)%, (-?\d+)%\)/);
-            
-            if (match) {
-                let x = parseFloat(match[1]);
-                let y = parseFloat(match[2]);
-                
-                // Add slight floating movement
-                x += (Math.random() - 0.5) * 0.5;
-                y += (Math.random() - 0.5) * 0.5;
-                
-                // Keep within bounds
-                x = Math.max(-51, Math.min(-49, x));
-                y = Math.max(-51, Math.min(-49, y));
-                
-                profileBg.style.transform = `translate(${x}%, ${y}%)`;
+    if (heroSubtitle) {
+        const text = heroSubtitle.textContent;
+        heroSubtitle.textContent = '';
+        
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                heroSubtitle.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
             }
-        }, 100);
+        }
+        
+        // Start typewriter effect after a short delay
+        setTimeout(typeWriter, 1000);
     }
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Add loading animation to images
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        img.addEventListener('load', function() {
+            this.style.opacity = '1';
+        });
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.3s ease';
+    });
 });
